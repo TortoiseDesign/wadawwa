@@ -2,40 +2,52 @@
 --<!>-- BOII | DEVELOPMENT --<!>--
 ----------------------------------
 
-# BOII | DEVELOPMENT - UTILITY: MONEY LAUNDERER
+# BOII | DEVELOPMENT - UTILITY: SKILLS MENU
 
-Here we have a simple money laundering script for your city.
-You can choose to wash markedbills or any item, and receive payment in either money or an item reward.
-Comes with a blacklisted job list to disable legal jobs from accessing.
-Any service jobs added to the service job list will force the ped to move location when in range.
-Enjoy! :) 
+Here we have a simple skills menu to diplay player qbcore player metadata.
+Menu displays both skills and job reputation.
+Enjoy :) 
 
 ### INSTALL ###
 
-1) Drag and drop `boii-moneylaunderer` into your server resources
-2) Add `ensure boii-moneylaunderer` to your `server.cfg`
-3) Customise `shared/config.lua` & `shared/language.lua` to fit your requirements
-4) Add item information under **SHARED/ITEMS.LUA** into your `qb-core/shared/items.lua` if using items provided
-5) Add images provided inside `images` into your `qb-core/inventory/html/images` if using items provided
-6) Restart your server
+1) Customise `skillsmenu.lua` to display the meta data information you require
+2) Drag and drop `boii-skillsmenu` into your server resources
+3) Add `ensure boii-skillsmenu` into your `server.cfg` ensuring load order is correct
+4) Press F8 and type `refresh; ensure boii-skillsmenu` or restart your server
 
-### USAGE ### 
+### USAGE ###
+- The menu uses your players meta data
+- Add any additional meta data you wish to use into `qb-core/server/player.lua`
+- An example is provided below for `drugxp` & `mining`
 
-- Third eye ped to start washing money
-- Disable blip in config if you do not want anyone to see locations
-- Blacklisted jobs cannot access or see locations
-- Service jobs cannot access or see locations and will also force ped to run away when within range
-- Cancelling progressbar will return whatever was handed over
+- Adding skills
+- Insert the following into your `qb-core/server/player.lua`
 
-### SHARED/ITEMS.LUA ###
+PlayerData.metadata['drugxp'] = PlayerData.metadata['drugxp'] or 0 -- Added for drugs
 
-	--<!>-- MONEY --<!>--
-	['cash'] 						= {['name'] = 'cash', 			 	  	  		['label'] = 'Cash', 					['weight'] = 1, 		['type'] = 'item', 		['image'] = 'cash.png', 				['unique'] = false, 	['useable'] = true, 	['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'Cash to be used within the BOII Community city!'},
-	['dirtycash'] 					= {['name'] = 'dirtycash', 			 	  	  	['label'] = 'Dirty Cash', 				['weight'] = 1, 		['type'] = 'item', 		['image'] = 'dirtycash.png', 			['unique'] = false, 	['useable'] = true, 	['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'Dirty cash? You should find someone to clean this for you!'},
+- Insert the following into `skillsmenu.lua`
 
+    {
+        header = 'Drug Manufacturing',
+        txt = 'Current Experience: '..pData.metadata['drugxp'],
+        icon = 'fa-solid fa-capsules',
+    },
+
+- Adding jobs
+- Insert the following into your `qb-core/server/player.lua`
+
+PlayerData.metadata['jobrep']['mining'] = PlayerData.metadata['jobrep']['mining'] or 0
+
+- Insert the following into `skillsmenu.lua`
+
+    {
+        header = 'Mining',
+        txt = 'Current Reputation: '..pData.metadata['jobrep']['mining'],
+        icon = 'fa-solid fa-cubes',
+    },
 
 ### PREVIEW ###
-https://www.youtube.com/watch?v=RZhfpvJ-Krw
+coming soon
 
 ### SUPPORT ###
 https://discord.gg/MUckUyS5Kq

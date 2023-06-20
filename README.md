@@ -1,130 +1,131 @@
-----------------------------------
---<!>-- BOII | DEVELOPMENT --<!>--
-----------------------------------
+-------------------------------
+---------- CASE#1993 ----------
+-------------------------------
 
-# BOII | DEVELOPMENT - ACTIVITY: FARMING
+### BOII | DEVELOPMENT - HUNTING SCRIPT ###
 
-Here we have one of the most indepth farming scripts you will find entirely for free!
-Script includes a full synced planting system and a variety of other options. 
-Full XP system with 13 levels of progression, can be toggled off in config.
-Script also includes a full brewing side option where you citizens can brew their own moonshine or bootleg vodka!
-Two drug types are also included, shrooms and peyote! 
-Warhouse location included to sell or purchase crops!
-Enjoy :)
+Here we have a nice hunting script for your city thats works from that native spawns.
+No having to place bait and wait around for animals if you can find it you can hunt it.
+Every animal ped can be hunted from rats to whales.
+Enjoy :) 
 
 ### INSTALL ###
 
-1) Customise `config.lua`, `language.lua` to your liking
-2) If you have changed any crops names edit `sql.sql` accordingly
-3) Insert the `sql.sql` provided into your servers database
-4) Insert the line under **QB-CORE/SERVER/PLAYER.LUA** into your `qb-core/server/player.lua` in order for XP to work correctly
-5) Insert item information provided under **QB-CORE/SHARED/ITEMS.LUA** into your `qb-core/shared/items.lua`
-6) Copy images from `html/images/*` into your `qb-inventory/html/images` you do not need to copy the images from `html/images/guide` 
-7) Drag and drop `boii-farming` into your server resources
-8) Add `ensure boii-farming` into your `server.cfg` and ensure load order is correct
-9) Restart server
+1) Customise `config.lua` to your liking
+2) Drag and drop `boii-hunting` into your server resources ensureing any requirements first
+3) Insert item information provided into your `qb-core/shared/items.lua`
+4) Insert images provided into your `qb-inventory/html/images`
+5) If you want to use a hunting license then follow the information provided on how to add the hunting license into your city and make it so police can grant
+6) Use the additional file `spawnmoreanimals.lua` at your own risk, this will force spawn a lot of extra animals. This is not required for the scrip to run.
 
-**IF YOU WISH TO EDIT THE GUIDE YOU CAN DO SO IN HTML/GUIDE.HTML**
+### USAGE ###
 
-### QB-CORE/SERVER/PLAYER.LUA ###
--- Insert the following line around `LINE:80` do not forget to edit this if you have changed your `MetaDataName` inside `config.lua`
+- Hunt native spawning animals (or use the file provided to spawn more, use with caution as adds (ms) to script)
+- Target dead animals with third-eye
+- Must have a knife to skin animals
+- Hunting store; buys hides and sells hunting equipment
+- Meat vendor; buys meats back from citizens
+- Exotic animal dealer; buys all illegal items (remove this if you do not wish to use)
 
-PlayerData.metadata['farmingxp'] = PlayerData.metadata['farmingxp'] or 0 -- Added for farming
+### REQUIREMENTS **ALL REQUIREMENTS ARE QBCORE STANDARD YOU SHOULD ALREADY HAVE THEM ALL** ###
 
-### QB-CORE/SHARED.ITEMS.LUA ###
+QB-CORE -- https://github.com/qbcore-framework/qb-core
+QB-TARGET -- https://github.com/BerkieBb/qb-target
+PROGRESSBAR -- https://github.com/qbcore-framework/progressbar
+QB-CITYHALL -- https://github.com/qbcore-framework/qb-cityhall
+QB-POLICEJOB -- https://github.com/qbcore-framework/qb-policejob
 
-	--<!>-- BOII FARMING --<!>--
-    -- Tools
-    ['milking_pail']            = {['name'] = 'milking_pail',              	['label'] = 'Milking Pail',             ['weight'] = 250,       ['type'] = 'item',      ['image'] = 'milking_pail.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A milking pail for collecting milk!'},
-    ['emptymilkbottle']         = {['name'] = 'emptymilkbottle',           	['label'] = 'Empty Milk Bottle',        ['weight'] = 100,       ['type'] = 'item',      ['image'] = 'emptymilkbottle.png',      	['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A empty milk bottle!'},
-    ['watering_can']          	= {['name'] = 'watering_can',           	['label'] = 'Watering Can',        		['weight'] = 100,       ['type'] = 'item',      ['image'] = 'watering_can.png',      		['unique'] = false,     ['useable'] = true,     ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A empty watering can!'},
-    ['watering_can_full']       = {['name'] = 'watering_can_full',          ['label'] = 'Full Watering Can',        ['weight'] = 500,       ['type'] = 'item',      ['image'] = 'watering_can_full.png',      	['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A watering can full of water!'},
-    ['farm_fertilizer']       	= {['name'] = 'farm_fertilizer',          	['label'] = 'Fertilizer',        		['weight'] = 1500,      ['type'] = 'item',      ['image'] = 'farm_fertilizer.png',      	['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bag of organic fertilizer!'},
-    ['emptysack']       		= {['name'] = 'emptysack',          		['label'] = 'Sack',        				['weight'] = 100,      	['type'] = 'item',      ['image'] = 'emptysack.png',      			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A empty sack for storing crops!'},
-    ['emptycrate']       		= {['name'] = 'emptycrate',          		['label'] = 'Crate',        			['weight'] = 100,      	['type'] = 'item',      ['image'] = 'emptycrate.png',      			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A empty crate for storing things!'},
-    ['bucket']       			= {['name'] = 'bucket',          			['label'] = 'Bucket',        			['weight'] = 100,      	['type'] = 'item',      ['image'] = 'bucket.png',      				['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A empty bucket!'},
-    ['growler']       			= {['name'] = 'growler',          			['label'] = 'Growler',        			['weight'] = 100,      	['type'] = 'item',      ['image'] = 'growler.png',      			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A empty growler!'},
-	['yeast']       			= {['name'] = 'yeast',          			['label'] = 'Yeast',        			['weight'] = 100,      	['type'] = 'item',      ['image'] = 'yeast.png',      				['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A packet of yeast!'},
-	['farmguide']       		= {['name'] = 'farmguide',          		['label'] = 'Farming Handbook',        	['weight'] = 100,      	['type'] = 'item',      ['image'] = 'farmguide.png',      			['unique'] = false,     ['useable'] = true,     ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Learn all about farming with this handbook!'},
-    ['trowel']          	    = {['name'] = 'trowel', 			  			['label'] = 'Trowel', 					['weight'] = 1000, 		['type'] = 'item', 		['image'] = 'trowel.png', 						['unique'] = false,    	['useable'] = false, 	['shouldClose'] = false,	   	['combinable'] = nil,   ['description'] = 'Small handheld garden shovel'},
+### HOW TO ADD HUNTING LICENSE ###
 
-    -- Legal seeds
-    ['barley_seed']             = {['name'] = 'barley_seed',               	['label'] = 'Barley Seed',              ['weight'] = 1,       	['type'] = 'item',      ['image'] = 'barley_seed.png',        		['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of barley seeds!'},
-	['maize_seed']             	= {['name'] = 'maize_seed',               	['label'] = 'Maize Seed',              	['weight'] = 1,       	['type'] = 'item',      ['image'] = 'maize_seed.png',        		['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of maize seeds!'},
- 	['lettuce_seed']            = {['name'] = 'lettuce_seed',               ['label'] = 'Lettuce Seed',             ['weight'] = 1,       	['type'] = 'item',      ['image'] = 'lettuce_seed.png',        		['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of lettuce seeds!'},
-	['potato_seed']             = {['name'] = 'potato_seed',               	['label'] = 'Potato Seed',              ['weight'] = 1,       	['type'] = 'item',      ['image'] = 'potato_seed.png',        		['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of seed potatoes!'},
- 	['strawberry_seed']         = {['name'] = 'strawberry_seed',            ['label'] = 'Strawberry Seed',          ['weight'] = 1,       	['type'] = 'item',      ['image'] = 'strawberry_seed.png',        	['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of strawberry seeds!'},
-  	['blueberry_seed']         	= {['name'] = 'blueberry_seed',            	['label'] = 'Blueberry Seed',          	['weight'] = 1,       	['type'] = 'item',      ['image'] = 'blueberry_seed.png',        	['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of blueberry seeds!'},
-	['pineapple_seed']         	= {['name'] = 'pineapple_seed',            	['label'] = 'Pineapple Seed',          	['weight'] = 1,       	['type'] = 'item',      ['image'] = 'pineapple_seed.png',        	['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of pineapple seeds!'},
-   	['tomato_seed']         	= {['name'] = 'tomato_seed',            	['label'] = 'Tomato Seed',          	['weight'] = 1,       	['type'] = 'item',      ['image'] = 'tomato_seed.png',        		['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of tomato seeds!'},
-    ['mushroom_seed']         	= {['name'] = 'mushroom_seed',            	['label'] = 'Mushroom Seed',          	['weight'] = 1,       	['type'] = 'item',      ['image'] = 'mushroom_seed.png',        	['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of mushroom seeds!'},
-    ['cactus_seed']         	= {['name'] = 'cactus_seed',            	['label'] = 'Cactus Seed',          	['weight'] = 1,       	['type'] = 'item',      ['image'] = 'cactus_seed.png',        		['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of cactus seeds!'},
+1) `QB-POLICEJOB/SERVER/MAIN.LUA` search for `if args[2] == "driver" or args[2] == "weapon" then` and replace with the line below. 
 
-	-- Illegal seeds
-    ['peyote_seed']         	= {['name'] = 'peyote_seed',            	['label'] = 'Peyote Seed',          	['weight'] = 1,       	['type'] = 'item',      ['image'] = 'peyote_seed.png',        		['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of peyote seeds!'},
-    ['psilocybin_seed']         = {['name'] = 'psilocybin_seed',            ['label'] = 'Psilocybin Seed',          ['weight'] = 1,       	['type'] = 'item',      ['image'] = 'psilocybin_seed.png',        	['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of psilocybin seeds!'},
-
-	-- Brewing
-	['moonshine_mash']       	= {['name'] = 'moonshine_mash',          	['label'] = 'Moonshine Mash',        	['weight'] = 5000,      ['type'] = 'item',      ['image'] = 'moonshine_mash.png',      		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bucket of moonshine mash!'},
-	['vodka_mash']       		= {['name'] = 'vodka_mash',          		['label'] = 'Vodka Mash',        		['weight'] = 5000,      ['type'] = 'item',      ['image'] = 'vodka_mash.png',      			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bucket of vodka mash!'},
-	['moonshine_ferm']       	= {['name'] = 'moonshine_ferm',          	['label'] = 'Fermented Moonshine',      ['weight'] = 5000,      ['type'] = 'item',      ['image'] = 'moonshine_ferm.png',      		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bucket of fermented moonshine!'},	
-	['vodka_ferm']       		= {['name'] = 'vodka_ferm',          		['label'] = 'Fermented Vodka',      	['weight'] = 5000,      ['type'] = 'item',      ['image'] = 'vodka_ferm.png',      			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bucket of fermented vodka!'},	
-	['moonshine_distill']       = {['name'] = 'moonshine_distill',          ['label'] = 'Distilled Moonshine',      ['weight'] = 5000,      ['type'] = 'item',      ['image'] = 'moonshine_distill.png',      	['unique'] = false,     ['useable'] = true,     ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bucket of distilled moonshine!'},	
-	['vodka_distill']       	= {['name'] = 'vodka_distill',          	['label'] = 'Distilled Vodka',      	['weight'] = 5000,      ['type'] = 'item',      ['image'] = 'vodka_distill.png',      		['unique'] = false,     ['useable'] = true,     ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bucket of distilled vodka!'},	
-
-	['moonshine']       		= {['name'] = 'moonshine',          		['label'] = 'Moonshine',      			['weight'] = 500,      	 ['type'] = 'item',      ['image'] = 'moonshine.png',      			['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bottle of moonshine!'},	
-	['bootlegvodka']       		= {['name'] = 'bootlegvodka',          		['label'] = 'Bootleg Vodka',      		['weight'] = 500,      	 ['type'] = 'item',      ['image'] = 'bootlegvodka.png',      		['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bottle of bootleg vodka!'},	
-
-	-- Crops
-    ['barley']                  = {['name'] = 'barley',                     ['label'] = 'Barley',               	['weight'] = 100,       ['type'] = 'item',      ['image'] = 'barley.png',        			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Barley!'},
-    ['maize']                  	= {['name'] = 'maize',                     	['label'] = 'Maize',               		['weight'] = 100,       ['type'] = 'item',      ['image'] = 'maize.png',        			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Maize!'},
-    ['lettuce']                 = {['name'] = 'lettuce',                    ['label'] = 'Lettuce',               	['weight'] = 100,       ['type'] = 'item',      ['image'] = 'lettuce.png',        			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Lettuce!'},
-    ['potato']                  = {['name'] = 'potato',                     ['label'] = 'Potato',               	['weight'] = 100,       ['type'] = 'item',      ['image'] = 'potato.png',        			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Potato!'},
-    ['cactusfruit']             = {['name'] = 'cactusfruit',                ['label'] = 'Cactus Fruit',             ['weight'] = 100,       ['type'] = 'item',      ['image'] = 'cactusfruit.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Cactus Fruit!'},
-    ['mushroom']              	= {['name'] = 'mushroom',                 	['label'] = 'Mushroom',              	['weight'] = 100,       ['type'] = 'item',      ['image'] = 'mushroom.png',        			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Mushroom!'},
-		
-	-- Fruit
-    ['orange'] 		            = {['name'] = 'orange', 			        ['label'] = 'Orange', 	                ['weight'] = 100, 		['type'] = 'item', 		['image'] = 'orange.png', 	            	['unique'] = false, 	['useable'] = false, 	['shouldClose'] = false,	['combinable'] = nil,   ['description'] = 'Orange!'},
-	['apple'] 		            = {['name'] = 'apple', 			        	['label'] = 'Apple', 	                ['weight'] = 100, 		['type'] = 'item', 		['image'] = 'apple.png', 	            	['unique'] = false, 	['useable'] = false, 	['shouldClose'] = false,	['combinable'] = nil,   ['description'] = 'Apple!'},
-	['strawberry'] 		        = {['name'] = 'strawberry', 			    ['label'] = 'Strawberry', 	            ['weight'] = 100, 		['type'] = 'item', 		['image'] = 'strawberry.png', 	        	['unique'] = false, 	['useable'] = false, 	['shouldClose'] = false,	['combinable'] = nil,   ['description'] = 'Straqwberry!'},
-	['blueberry'] 		        = {['name'] = 'blueberry', 			    	['label'] = 'Blueberry', 	            ['weight'] = 100, 		['type'] = 'item', 		['image'] = 'blueberry.png', 	        	['unique'] = false, 	['useable'] = false, 	['shouldClose'] = false,	['combinable'] = nil,   ['description'] = 'Blueberry!'},
-	['cherry']            		= {['name'] = 'cherry',             		['label'] = 'Cherry',     				['weight'] = 100,       ['type'] = 'item',      ['image'] = 'cherry.png',        			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,   	['combinable'] = nil,   ['description'] = 'Cherry!'},
-	['lemon']            		= {['name'] = 'lemon',             			['label'] = 'Lemon',     				['weight'] = 100,       ['type'] = 'item',      ['image'] = 'lemon.png',        			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,   	['combinable'] = nil,   ['description'] = 'Lemon!'},	
-	['pineapple']               = {['name'] = 'pineapple',             		['label'] = 'Pineapple',     			['weight'] = 100,       ['type'] = 'item',      ['image'] = 'pineapple.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,   	['combinable'] = nil,   ['description'] = 'Lemon!'},
-	['coconut']            		= {['name'] = 'coconut',             		['label'] = 'Coconut',     				['weight'] = 100,       ['type'] = 'item',      ['image'] = 'coconut.png',        			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,   	['combinable'] = nil,   ['description'] = 'Coconut!'},
-    ['tomato']                  = {['name'] = 'tomato',                     ['label'] = 'Tomato',               	['weight'] = 100,       ['type'] = 'item',      ['image'] = 'tomato.png',        			['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Tomato!'},
-
-    -- Animals
-    ['egg']              	 	= {['name'] = 'egg',               			['label'] = 'Egg',                		['weight'] = 50,       	['type'] = 'item',      ['image'] = 'egg.png',        				['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Fresh eggs!'},
-    ['milk_pail']              	= {['name'] = 'milk_pail',               	['label'] = 'Milk Pail',       			['weight'] = 1000,      ['type'] = 'item',      ['image'] = 'milk_pail.png',        		['unique'] = false,     ['useable'] = true,     ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'Fresh milk, straight from the cow!'},
-    ['milk']              	 	= {['name'] = 'milk',               		['label'] = 'Milk',                		['weight'] = 250,       ['type'] = 'item',      ['image'] = 'milk.png',        				['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A bottle of fresh milk!'},
-    
-    -- Deliveries
-    ['barley_sack']             = {['name'] = 'barley_sack',                ['label'] = 'Barley Sack',              ['weight'] = 5000,       ['type'] = 'item',      ['image'] = 'barley_sack.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A sack of barley ready for selling!'},
-	['maize_sack']             	= {['name'] = 'maize_sack',                	['label'] = 'Maize Sack',              	['weight'] = 5000,       ['type'] = 'item',      ['image'] = 'maize_sack.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A sack of maize ready for selling!'},	
-	['potato_sack']             = {['name'] = 'potato_sack',                ['label'] = 'Potato Sack',              ['weight'] = 5000,       ['type'] = 'item',      ['image'] = 'potato_sack.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A sack of potatoes ready for selling!'},	
-	['mushroom_sack']           = {['name'] = 'mushroom_sack',              ['label'] = 'Mushroom Sack',            ['weight'] = 5000,       ['type'] = 'item',      ['image'] = 'mushroom_sack.png',        	['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A sack of mushrooms ready for selling!'},	
-	['lettuce_crate']           = {['name'] = 'lettuce_crate',              ['label'] = 'Lettuce Crate',            ['weight'] = 3500,       ['type'] = 'item',      ['image'] = 'lettuce_crate.png',        	['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of lettuce ready for selling!'},	
-	['cactusfruit_crate']       = {['name'] = 'cactusfruit_crate',          ['label'] = 'Cactus Fruit Crate',       ['weight'] = 3500,       ['type'] = 'item',      ['image'] = 'cactusfruit_crate.png',       ['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of cactus fruits ready for selling!'},	
-	['tomato_crate']       		= {['name'] = 'tomato_crate',          		['label'] = 'Tomato Crate',       		['weight'] = 2500,       ['type'] = 'item',      ['image'] = 'tomato_crate.png',       		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of tomatoes ready for selling!'},	
-	['apple_crate']             = {['name'] = 'apple_crate',                ['label'] = 'Apple Crate',              ['weight'] = 3500,       ['type'] = 'item',      ['image'] = 'apple_crate.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of apples ready for selling!'},	
-	['orange_crate']            = {['name'] = 'orange_crate',               ['label'] = 'Orange Crate',             ['weight'] = 3500,       ['type'] = 'item',      ['image'] = 'orange_crate.png',        	['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of oranges ready for selling!'},	
-	['lemon_crate']             = {['name'] = 'lemon_crate',                ['label'] = 'Lemon Crate',              ['weight'] = 3500,       ['type'] = 'item',      ['image'] = 'lemon_crate.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of lemons ready for selling!'},	
-	['lime_crate']             	= {['name'] = 'lime_crate',                	['label'] = 'Lime Crate',              	['weight'] = 3500,       ['type'] = 'item',      ['image'] = 'lime_crate.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of limes ready for selling!'},	
-	['strawberry_crate']        = {['name'] = 'strawberry_crate',           ['label'] = 'Strawberry Crate',         ['weight'] = 2500,       ['type'] = 'item',      ['image'] = 'strawberry_crate.png',        ['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of strawberries ready for selling!'},	
-	['blueberry_crate']        	= {['name'] = 'blueberry_crate',           	['label'] = 'Blueberry Crate',         	['weight'] = 2500,       ['type'] = 'item',      ['image'] = 'blueberry_crate.png',        	['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of blueberries ready for selling!'},
-	['milk_crate']        		= {['name'] = 'milk_crate',           		['label'] = 'Milk Crate',         		['weight'] = 5500,       ['type'] = 'item',      ['image'] = 'milk_crate.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of milk bottles ready for selling!'},	
-	['egg_crate']        		= {['name'] = 'egg_crate',           		['label'] = 'Egg Crate',         		['weight'] = 2500,       ['type'] = 'item',      ['image'] = 'egg_crate.png',        		['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of eggs ready for selling!'},
-	['pineapple_crate']            = {['name'] = 'pineapple_crate',               ['label'] = 'Pineapple Crate',             ['weight'] = 2500,       ['type'] = 'item',      ['image'] = 'pineapple_crate.png',            ['unique'] = false,     ['useable'] = false,    ['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A crate of pineapples ready for selling!'},
+	if args[2] == "driver" or args[2] == "weapon" or args[2] == "hunting" then
 	
-	-- Drugs
-	['magic_mushroom']          = {['name'] = 'magic_mushroom',             ['label'] = 'Magic Mushroom',           ['weight'] = 20,       	 ['type'] = 'item',      ['image'] = 'magic_mushroom.png',        	['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of magic mushrooms!'},	
-	['peyote_button']          	= {['name'] = 'peyote_button',             	['label'] = 'Peyote Button',           	['weight'] = 20,       	 ['type'] = 'item',      ['image'] = 'peyote_button.png',        	['unique'] = false,     ['useable'] = true,    	['shouldClose'] = false,    ['combinable'] = nil,   ['description'] = 'A handful of peyote buttons!'},	
-	--<!>-- BOII FARMING --<!>--
+2) `QB-POLICEJOB/LOCALE/"YOURLANGUAGE".LUA` search for `license_type = 'License Type (driver/weapon)',` and replace with the line below.
+
+	license_type = 'License Type (driver/weapon/hunting)', -- Edited for hunting
+
+3) `QB-CITYHALL/CONFIG.LUA` under `Config.Cityhalls` insert the following; 
+
+	["huntinglicense"] = {
+        label = "Hunting License",
+		cost = 50,
+		metadata = "hunting"
+    },
+
+4) `QB-CITYHALL/SERVER/MAIN.LUA` search for `qb-cityhall:server:requestId` and insert the following code below weapons license (around line: 66)
+
+	elseif item == "huntinglicense" then -- added for hunting
+		info.citizenid = Player.PlayerData.citizenid
+        info.firstname = Player.PlayerData.charinfo.firstname
+        info.lastname = Player.PlayerData.charinfo.lastname
+        info.birthdate = Player.PlayerData.charinfo.birthdate
+		info.gender = Player.PlayerData.charinfo.gender
+
+5) `QB-CITYHALL/LOCALE/"YOURLANGUAGE".LUA` under info search insert the following;
+
+	huntinglicense = 'Hunting License', -- added for hunting
+
+6) `QB-INVENTORY/HTML/JS/APP.JS` insert the code below onto `LINE:444`
+
+} else if (itemData.name == "huntinglicence") {
+            var gender = "Man";
+            if (itemData.info.gender == 1) {
+                gender = "Woman";
+            }
+            $(".item-info-title").html("<p>" + itemData.label + "</p>");
+            $(".item-info-description").html(
+                "<p><strong>CSN: </strong><span>" +
+                itemData.info.citizenid +
+                "</span></p><p><strong>First Name: </strong><span>" +
+                itemData.info.firstname +
+                "</span></p><p><strong>Last Name: </strong><span>" +
+                itemData.info.lastname +
+                "</span></p><p><strong>Birth Date: </strong><span>" +
+                itemData.info.birthdate +
+                "</span></p><p><strong>Gender: </strong><span>" +
+                gender +
+                "</span></p>"
+            );
+
+7) `QB-CORE/SERVER/PLAYER.LUA` search for PlayerData.metadata['licences'] and add the following; 
+
+	['hunting'] = false
+	
+### SHARED.LUA ###
+
+-- Hunting
+	["skin_shark"]         	     = {["name"] = "skin_shark",         		["label"] = "Shark Skin",    			["weight"] = 1750,      ["type"] = "item",      ["image"] = "skin_shark.png",     	    ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Shark skin. Highly illegal!"},
+	["skin_dolphin"]             = {["name"] = "skin_dolphin",         		["label"] = "Dolphin Skin",    			["weight"] = 850,       ["type"] = "item",      ["image"] = "skin_dolphin.png",         ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Dolphin skin. Highly illegal!"},
+	["skin_stingray"]         	 = {["name"] = "skin_stingray",         	["label"] = "Stingray Skin",    		["weight"] = 850,       ["type"] = "item",      ["image"] = "skin_stingray.png",     	["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Stingray skin. Highly illegal!"},
+	["skin_mtlion"]         	 = {["name"] = "skin_mtlion",         		["label"] = "Mt Lion Hide",    			["weight"] = 1050,      ["type"] = "item",      ["image"] = "skin_mtlion.png",     	    ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Mt. Lion hide. Highly illegal!"},
+	["skin_coyote"]         	 = {["name"] = "skin_coyote",         		["label"] = "Coyote Hide",    			["weight"] = 750,       ["type"] = "item",      ["image"] = "skin_coyote.png",     	    ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Coyote hide."},
+	["skin_deer"]         		 = {["name"] = "skin_deer",         		["label"] = "Deer Hide",    			["weight"] = 950,       ["type"] = "item",      ["image"] = "skin_deer.png",     	    ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Deer hide."},
+	["skin_cow"]         	 	 = {["name"] = "skin_cow",         			["label"] = "Cow Hide",    				["weight"] = 1250,      ["type"] = "item",      ["image"] = "skin_cow.png",     	    ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Cow hide."},
+	["skin_boar"]         	 	 = {["name"] = "skin_boar",         		["label"] = "Boar Hide",    			["weight"] = 1250,      ["type"] = "item",      ["image"] = "skin_boar.png",     	    ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Boar hide."},
+	["skin_pig"]         	 	 = {["name"] = "skin_pig",         			["label"] = "Pig Skin",    				["weight"] = 850,       ["type"] = "item",      ["image"] = "skin_pig.png",     	    ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Pig skin."},
+	["skin_rabbit"]         	 = {["name"] = "skin_rabbit",         		["label"] = "Rabbit Hide",    			["weight"] = 550,       ["type"] = "item",      ["image"] = "skin_rabbit.png",     	    ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Rabbit hide."},
+	["skin_rat"]         	 	 = {["name"] = "skin_rat",         			["label"] = "Rat Hide",    				["weight"] = 150,       ["type"] = "item",      ["image"] = "skin_rat.png",     	    ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Rat hide."},
+	["skin_whale"]         		 = {["name"] = "skin_whale",         		["label"] = "Whale Skin",    			["weight"] = 7500,      ["type"] = "item",      ["image"] = "skin_whale.png",        	["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Whale skin. Highly illegal"},
+	["meat_shark"]         	     = {["name"] = "meat_shark",         		["label"] = "Shark Meat",   	   	    ["weight"] = 1200,      ["type"] = "item",      ["image"] = "meat_shark.png",     		["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Shark meat!"},
+	["meat_stingray"]            = {["name"] = "meat_stingray",         	["label"] = "Stingray Meat",    		["weight"] = 700,       ["type"] = "item",      ["image"] = "meat_stingray.png",        ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Stingray meat!"},
+	["meat_dolphin"]             = {["name"] = "meat_dolphin",         		["label"] = "Dolphin Meat",    			["weight"] = 850,       ["type"] = "item",      ["image"] = "meat_dolphin.png",         ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Dolphin meat!"},
+	["meat_whale"]         		 = {["name"] = "meat_whale",         		["label"] = "Whale Meat",    			["weight"] = 6000,      ["type"] = "item",      ["image"] = "meat_whale.png",        	["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Whale meat!"},
+	["meat_boar"]            	 = {["name"] = "meat_boar",         		["label"] = "Boar Meat",    			["weight"] = 700,       ["type"] = "item",      ["image"] = "meat_boar.png",        	["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Boar meat!"},
+	["meat_chickenhawk"]         = {["name"] = "meat_chickenhawk",         	["label"] = "Chickenhawk Meat",    		["weight"] = 400,       ["type"] = "item",      ["image"] = "meat_chickenhawk.png",     ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Chickenhawk meat!"},
+	["meat_cormorant"]           = {["name"] = "meat_cormorant",         	["label"] = "Cormorant Meat",    		["weight"] = 400,       ["type"] = "item",      ["image"] = "meat_cormorant.png",       ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Cormorant meat!"},
+	["meat_coyote"]              = {["name"] = "meat_coyote",         	    ["label"] = "Coyote Meat",    			["weight"] = 700,       ["type"] = "item",      ["image"] = "meat_coyote.png",        	["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Coyote meat!"},
+	["meat_deer"]            	 = {["name"] = "meat_deer",         	    ["label"] = "Venison",    				["weight"] = 850,       ["type"] = "item",      ["image"] = "meat_deer.png",        	["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Deer meat!"},
+	["meat_mtlion"]            	 = {["name"] = "meat_mtlion",         		["label"] = "Mt Lion Meat",    			["weight"] = 1000,      ["type"] = "item",      ["image"] = "meat_mtlion.png",          ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Mt Lion meat!"},
+	["meat_rabbit"]              = {["name"] = "meat_rabbit",         		["label"] = "Rabbit Meat",    			["weight"] = 700,       ["type"] = "item",      ["image"] = "meat_rabbit.png",        	["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Rabbit meat!"},
+	["meat_cow"]            	 = {["name"] = "meat_cow",         			["label"] = "Beef Meat",    			["weight"] = 1000,      ["type"] = "item",      ["image"] = "meat_cow.png",        		["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Cow meat!"},
+	["meat_pig"]            	 = {["name"] = "meat_pig",         			["label"] = "Pork Meat",    			["weight"] = 750,       ["type"] = "item",      ["image"] = "meat_pig.png",        		["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Pig meat!"},
+	["meat_chicken"]             = {["name"] = "meat_chicken",         		["label"] = "Chicken Meat",    			["weight"] = 700,       ["type"] = "item",      ["image"] = "meat_chicken.png",         ["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Chicken meat!"},
+	["meat_rat"]            	 = {["name"] = "meat_rat",         		 	["label"] = "Rat Meat",    				["weight"] = 200,       ["type"] = "item",      ["image"] = "meat_rat.png",        		["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "Rat meat!"},
+	["huntinglicense"] 			 = {["name"] = "huntinglicense", 			["label"] = "Hunting License", 			["weight"] = 1, 		["type"] = "item", 		["image"] = "huntinglicense.png", 		["unique"] = true, 		["useable"] = true, 	["shouldClose"] = false,   ["combinable"] = nil,   ["description"] = "Permit to show officals that you can legally hunt."},
 
 
 ### PREVIEW ###
-https://www.youtube.com/watch?v=BlDeQWGPzrM
-
+https://www.youtube.com/watch?v=5im3mCYu0zI
 ### SUPPORT ###
 https://discord.gg/MUckUyS5Kq
